@@ -1,8 +1,8 @@
 export type { Token };
 
-type TokenType = 'LPAREN' | 'RPAREN' | 'OP' | 'DIGITS' | 'VAR';
+type TokenName = 'LPAREN' | 'RPAREN' | 'OP' | 'DIGITS' | 'VAR';
 
 interface Token {
-  type: TokenType;
+  name: TokenName;
   value: string;
 };
