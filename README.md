@@ -1,2 +1,3 @@
-# arithmetic-interpreter
-A library to evaluate simple arithmetic express
+# math-intr
+
+`math-intr` is a interpreter for mathematical expressions.
