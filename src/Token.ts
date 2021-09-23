@@ -1,8 +1,18 @@
-export type { Token };
+export {
+  TokenName,
+  Token
+}
 
-type TokenName = 'LPAREN' | 'RPAREN' | 'OP' | 'DIGITS' | 'VAR';
+enum TokenName {
+  MINUS, PLUS, SLASH, STAR,
+  LPAREN, RPAREN,
+  IDENTIFIER, NUMBER,
+  EOF,
+}
 
-interface Token {
-  name: TokenName;
-  value: string;
-};
+class Token {
+  constructor(
+    public readonly name: TokenName,
+    public readonly lexeme: string = '',
+  ) {}
+}
