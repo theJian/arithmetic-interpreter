@@ -15,7 +15,7 @@ class Lexer {
    */
   nextToken(): Token {
     let c = this.advance();
-    while(/\s/.test(c)) c = this.advance(); // Getting the next non-whitespace character
+    while (/\s/.test(c)) c = this.advance(); // Getting the next non-whitespace character
 
     this.start = this.current;
     switch (c) {
@@ -25,6 +25,8 @@ class Lexer {
       case '*': return new Token(TokenName.STAR);
       case '(': return new Token(TokenName.LPAREN);
       case ')': return new Token(TokenName.RPAREN);
+      case ',': return new Token(TokenName.COMMA);
+      case '%': return new Token(TokenName.PERCNT);
       case '\0': return new Token(TokenName.EOF);
       default:
         if (/\d/.test(c)) return this.number();
@@ -34,8 +36,10 @@ class Lexer {
   }
 
   private identifier(): Token {
-    while(this.match(/[$A-Za-z0-9_]/));
-    return new Token(TokenName.NUMBER, this.input.slice(this.start, this.current));
+    while (this.match(/[$A-Za-z0-9_]/));
+    const lexeme = this.input.slice(this.start, this.current);
+    const tokenName = builtIns[lexeme] || TokenName.IDENTIFIER;
+    return new Token(tokenName, lexeme);
   }
 
   private number(): Token {
@@ -83,3 +87,10 @@ class Lexer {
     return this.input.charAt(this.current);
   }
 }
+
+const builtIns: Record<string, TokenName> = {};
+builtIns['ceil'] = TokenName.CEIL;
+builtIns['floor'] = TokenName.FLOOR;
+builtIns['min'] = TokenName.MIN;
+builtIns['max'] = TokenName.MAX;
+builtIns['mean'] = TokenName.MEAN;

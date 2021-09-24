@@ -4,9 +4,17 @@ export {
 }
 
 enum TokenName {
-  MINUS, PLUS, SLASH, STAR,
-  LPAREN, RPAREN,
+  // Some arithmetic operators
+  MINUS, PLUS, SLASH, STAR, PERCNT,
+
+  LPAREN, RPAREN, COMMA,
+
+  // Literals
   IDENTIFIER, NUMBER,
+
+  // Built-in functions
+  CEIL, FLOOR, MIN, MAX, MEAN,
+
   EOF,
 }
 
