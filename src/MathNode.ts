@@ -1,4 +1,4 @@
-export { MathNode }
+export { MathNode };
 
 namespace MathNode {
   export type Node = Operand | Operator | Variable;
@@ -20,12 +20,12 @@ namespace MathNode {
       public readonly name: string
     ) {}
 
-    subs(values: Record<string, number>): number|never {
-      if (!values.hasOwnProperty(this.name)) {
+    subs(scope: Record<string, number>): number|never {
+      if (!scope.hasOwnProperty(this.name)) {
         throw new Error(`Missing value for variable "${this.name}"`);
       }
 
-      return values[this.name];
+      return scope[this.name];
     }
   }
 }

@@ -1,1 +1,2 @@
-import { Parser } from './Parser';
+import { compile } from './interpreter';
+export { compile };
