@@ -1,6 +1,8 @@
 export { MathNode }
 
 namespace MathNode {
+  export type Node = Operand | Operator | Variable;
+
   export class Operand {
     constructor(
       public readonly value: number

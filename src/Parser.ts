@@ -3,12 +3,14 @@ import { Lexer } from './Lexer';
 import { Queue } from './Queue';
 import { Stack } from './Stack';
 import { Operator } from './Operator';
+import { MathNode } from './MathNode';
+import * as fns from './functions'
 
 export { Parser };
 
 class Parser {
   private lexer: Lexer;
-  private output: Queue<Token> = new Queue();
+  private output: Queue<MathNode.Node> = new Queue();
   private operators: Stack<Token> = new Stack();
 
   constructor(input: string) {
@@ -23,8 +25,9 @@ class Parser {
       if (token.name === TokenName.EOF) break; // reach the end of input
 
       switch (token.name) {
+        case TokenName.IDENTIFIER:
         case TokenName.NUMBER:
-          this.output.push(token);
+          this.addToOutputQueue(token);
           break;
 
         case TokenName.CEIL:
@@ -51,6 +54,10 @@ class Parser {
           this.pushOperator(token);
           break;
 
+        case TokenName.COMMA:
+          // Ignore
+          break;
+
         default:
           throw new Error(`Unexpected token ${token.lexeme}`);
       }
@@ -58,19 +65,66 @@ class Parser {
 
     while (!this.operators.empty()) {
       const token = this.operators.pop()!;
-      if (token.name === TokenName.LPAREN) {
-        throw new Error('Mismatched parentheses');
+      switch (token.name) {
+        case TokenName.LPAREN:
+          throw new Error('Mismatched parentheses');
       }
-      this.output.push(token);
+      this.addToOutputQueue(token);
     }
 
     return this.output;
   }
 
+  /**
+   * Convert a token to MathNode and push it to output queue
+   */
+  private addToOutputQueue(token: Token) {
+    switch (token.name) {
+      case TokenName.NUMBER:
+        this.output.push(new MathNode.Operand(Number(token.lexeme)));
+        break;
+
+      case TokenName.IDENTIFIER:
+        this.output.push(new MathNode.Variable(token.lexeme));
+        break;
+
+      case TokenName.CEIL:
+        this.output.push(new MathNode.Operator(fns.ceil));
+        break;
+
+      case TokenName.FLOOR:
+        this.output.push(new MathNode.Operator(fns.floor));
+        break;
+
+      case TokenName.MIN:
+        this.output.push(new MathNode.Operator(fns.min));
+        break;
+
+      case TokenName.MAX:
+        this.output.push(new MathNode.Operator(fns.max));
+        break;
+
+      case TokenName.MEAN:
+        this.output.push(new MathNode.Operator(fns.mean));
+        break;
+
+      case TokenName.MINUS:
+      case TokenName.PLUS:
+      case TokenName.SLASH:
+      case TokenName.STAR:
+      case TokenName.PERCNT:
+        this.output.push(this.getAssociatedOperator(token));
+        break;
+
+      default:
+        throw new Error(`Can not add token ${token.lexeme} to output queue`);
+    }
+  }
+
   private popGrouping() {
     // Push operators to output until we reach an associated left parenthese
     while (!this.operators.empty() && this.operators.top()!.name !== TokenName.LPAREN) {
-      this.output.push(this.operators.pop()!);
+      this.addToOutputQueue(this.operators.pop()!);
     }
 
     // Mismatched parentheses
@@ -89,7 +143,7 @@ class Parser {
       token?.name === TokenName.MAX   ||
       token?.name === TokenName.MEAN
     ) {
-      this.output.push(token);
+      this.addToOutputQueue(token);
     }
   }
 
@@ -107,7 +161,7 @@ class Parser {
         )
       )
     ) {
-      this.output.push(this.operators.pop()!);
+      this.addToOutputQueue(this.operators.pop()!);
     }
     this.operators.push(token);
   }
