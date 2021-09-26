@@ -1,2 +1,2 @@
-import { compile } from './interpreter';
+import { compile } from './compile';
 export { compile };
