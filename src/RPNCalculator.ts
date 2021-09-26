@@ -1,23 +1,19 @@
 import { MathNode } from './MathNode';
-import { Queue } from './Queue';
 import { Stack } from './Stack';
 
 export { RPNCalculator };
 
 class RPNCalculator {
   constructor(
-    private readonly rpn: Queue<MathNode.Node>
+    private readonly rpn: Array<MathNode.Node>
   ) {}
 
   evaluate(scope?: Record<string, number>) {
     const stack = new Stack<number>();
-    const rpn = this.rpn;
-    while (!rpn.empty()) {
-      const it = rpn.pop();
-
+    this.rpn.forEach(it => {
       if (it instanceof MathNode.Operand) {
         stack.push(it.value);
-        continue;
+        return;
       }
 
       if (it instanceof MathNode.Operator) {
@@ -27,7 +23,7 @@ class RPNCalculator {
           throw new Error(`Operator expected to have ${it.arity} arguments, but got ${args.size()}`);
         }
         stack.push(it.apply(...args.toArray()))
-        continue;
+        return;
       }
 
       if (it instanceof MathNode.Variable) {
@@ -41,11 +37,11 @@ class RPNCalculator {
         }
 
         stack.push(value);
-        continue;
+        return;
       }
 
       throw new Error('Invalid RPN');
-    }
+    })
 
     if (stack.empty()) {
       throw new Error('Empty input');

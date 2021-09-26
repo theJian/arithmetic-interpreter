@@ -7,5 +7,5 @@ export {
 
 const compile = (input: string): RPNCalculator => {
   const parser = new Parser(input);
-  return new RPNCalculator(parser.parse())
+  return new RPNCalculator(parser.parse().toArray())
 }
