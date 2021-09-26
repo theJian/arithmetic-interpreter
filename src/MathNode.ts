@@ -12,7 +12,7 @@ namespace MathNode {
   export class Operator {
     constructor(
       public readonly arity: number,
-      public readonly apply: (a: number, b: number) => number
+      public readonly apply: (...args: number[]) => number
     ) {}
   }
 

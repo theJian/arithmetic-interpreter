@@ -9,6 +9,10 @@ class Stack<T> {
     return this.array.length <= 0;
   }
 
+  size(): number {
+    return this.array.length;
+  }
+
   top(): T|undefined {
     return this.array[this.array.length - 1];
   }
@@ -19,5 +23,9 @@ class Stack<T> {
 
   push(item: T): number {
     return this.array.push(item);
+  }
+
+  toArray() {
+    return [...this.array].reverse();
   }
 }

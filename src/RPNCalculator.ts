@@ -21,11 +21,12 @@ class RPNCalculator {
       }
 
       if (it instanceof MathNode.Operator) {
-        const arg2 = stack.pop(), arg1 = stack.pop();
-        if (arg1 === undefined || arg2 === undefined) {
-          throw new Error('Expected two operands');
+        const args = new Stack<number>();
+        while (!stack.empty() && args.size() < it.arity) args.push(stack.pop()!);
+        if (args.size() < it.arity) {
+          throw new Error(`Operator expected to have ${it.arity} arguments, but got ${args.size()}`);
         }
-        stack.push(it.apply(arg1, arg2))
+        stack.push(it.apply(...args.toArray()))
         continue;
       }
 
