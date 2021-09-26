@@ -17,16 +17,16 @@ class RPNCalculator {
 
       if (it instanceof MathNode.Operand) {
         stack.push(it.value);
-        return;
+        continue;
       }
 
       if (it instanceof MathNode.Operator) {
         const arg2 = stack.pop(), arg1 = stack.pop();
         if (arg1 === undefined || arg2 === undefined) {
-          throw new Error('Invalid RPN');
+          throw new Error('Expected two operands');
         }
         stack.push(it.apply(arg1, arg2))
-        return;
+        continue;
       }
 
       if (it instanceof MathNode.Variable) {
@@ -40,6 +40,7 @@ class RPNCalculator {
         }
 
         stack.push(value);
+        continue;
       }
 
       throw new Error('Invalid RPN');

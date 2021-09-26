@@ -113,7 +113,7 @@ class Parser {
       case TokenName.SLASH:
       case TokenName.STAR:
       case TokenName.PERCNT:
-        this.output.push(this.getAssociatedOperator(token));
+        this.output.push(new MathNode.Operator(this.getAssociatedOperator(token).apply));
         break;
 
       default:
@@ -143,6 +143,7 @@ class Parser {
       token?.name === TokenName.MAX   ||
       token?.name === TokenName.MEAN
     ) {
+      this.operators.pop();
       this.addToOutputQueue(token);
     }
   }

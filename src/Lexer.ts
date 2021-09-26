@@ -14,10 +14,10 @@ class Lexer {
    * Return the next token
    */
   nextToken(): Token {
-    let c = this.advance();
-    while (/\s/.test(c)) c = this.advance(); // Getting the next non-whitespace character
+    while (/\s/.test(this.peek())) this.advance(); // Skip whitespace characters
+    this.start = this.current; // Save the current index before lexing
 
-    this.start = this.current;
+    const c = this.advance();
     switch (c) {
       case '-': return new Token(TokenName.MINUS);
       case '+': return new Token(TokenName.PLUS);
