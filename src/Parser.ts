@@ -89,23 +89,23 @@ class Parser {
         break;
 
       case TokenName.CEIL:
-        this.output.push(new MathNode.Operator(fns.ceil));
+        this.output.push(new MathNode.Operator(fns.ceil.length, fns.ceil));
         break;
 
       case TokenName.FLOOR:
-        this.output.push(new MathNode.Operator(fns.floor));
+        this.output.push(new MathNode.Operator(fns.floor.length, fns.floor));
         break;
 
       case TokenName.MIN:
-        this.output.push(new MathNode.Operator(fns.min));
+        this.output.push(new MathNode.Operator(fns.min.length, fns.min));
         break;
 
       case TokenName.MAX:
-        this.output.push(new MathNode.Operator(fns.max));
+        this.output.push(new MathNode.Operator(fns.max.length, fns.max));
         break;
 
       case TokenName.MEAN:
-        this.output.push(new MathNode.Operator(fns.mean));
+        this.output.push(new MathNode.Operator(fns.mean.length, fns.mean));
         break;
 
       case TokenName.MINUS:
@@ -113,7 +113,7 @@ class Parser {
       case TokenName.SLASH:
       case TokenName.STAR:
       case TokenName.PERCNT:
-        this.output.push(new MathNode.Operator(this.getAssociatedOperator(token).apply));
+        this.output.push(new MathNode.Operator(2, this.getAssociatedOperator(token).apply));
         break;
 
       default:
